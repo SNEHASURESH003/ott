@@ -1,0 +1,48 @@
+.fullscreen-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1; /* Keeps it behind other content */
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5); /* Shadow effect */
+}
+
+
+.thumbnail-img {
+  height: 200px;         /* Or any size that fits your design */
+  object-fit: cover;     /* Keeps aspect ratio and fills container */
+  width: 100%;           /* Ensures full width of card */
+}
+
+
+.card-body.custom-body {
+  background-color:#39194a; /* Light gray, change to any color you want */
+  color:white; /* Text color */
+  
+}
+
+
+
+
+
+html, body, #root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; 
+  overflow-x: hidden; /* prevent double scrollbars */
+  font-family: sans-serif;
+}
+
+
+ .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+
+  
+
+
