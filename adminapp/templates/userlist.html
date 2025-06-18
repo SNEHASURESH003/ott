@@ -1,0 +1,140 @@
+{% extends 'layout/app-layout.html' %}
+{% load static %}
+
+{% block 'content' %}
+<style>
+  table.table tbody td {
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.6),
+                rgba(0, 0, 0, 0.6)
+              ),
+              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff !important;
+  }
+
+  table.table tbody tr {
+    background: transparent !important;
+  }
+</style>
+  <h1 class="text-center">USER LISTS</h1>
+<div class="d-flex justify-content-end align-items-center  container mt-5" style="gap: 8px;">
+
+  <br>
+  <form method="get" action="{% url 'search_users' %}" cclass="mb-0" style="position: relative; width: 250px;">
+  <div class="position-relative" style="width: 250px;">
+    <input 
+      type="text" 
+      name="q" 
+      class="form-control form-control-sm pe-5" 
+      placeholder="Search by email" 
+      value="{{ query }}" 
+      required>
+    <button 
+      type="submit" 
+      class="btn btn-sm btn-secondary position-absolute top-0 end-0 h-100" 
+      title="Search">
+      <i class="bi bi-search"></i>
+      <span class="visually-hidden">Search</span>
+    </button>
+  </div>
+</form>
+ <a href="{% url 'userlist' %}" class="btn btn-sm btn-outline-light" title="Back to full list">
+    <i class="bi bi-arrow-left"></i> Back
+  </a>
+</div>
+
+  <table class="table table-bordered container mt-5">
+    <thead class="table-dark">
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.get_full_name|default:user.email }}</td>
+          <td>{{ user.email }}</td>
+         
+          <td>
+            {% if user.is_active %}
+              <span class="badge bg-success">Active</span>
+            {% else %}
+              <span class="badge bg-danger">Blocked</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="d-flex gap-2">
+              <a href="{% url 'user_history' user.id %}" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center" style="width: 120px;">
+                View History
+              </a>
+              <a href="#"
+                 class="btn btn-sm d-flex align-items-center justify-content-center"
+                 style="width: 120px;
+                        {% if user.is_active %}background-color: #dc3545; color: white;
+                        {% else %}background-color: #28a745; color: white;
+                        {% endif %}"
+                 data-bs-toggle="modal"
+                 data-bs-target="#confirmModal"
+                 data-url="{% url 'toggle_user_status' user.id %}"
+                 data-action="{% if user.is_active %}block{% else %}unblock{% endif %}">
+                <i class="bi {% if user.is_active %}bi-lock-fill{% else %}bi-unlock-fill{% endif %} me-1"></i>
+                {% if user.is_active %}Block{% else %}Unblock{% endif %}
+              </a>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" class="text-center">
+            {% if request.GET.q %}
+              No users found for "{{ request.GET.q }}"
+            {% else %}
+              No users found.
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Action</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to <span id="modalActionText"></span> this user?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        <a href="#" id="confirmBtn" class="btn btn-danger">Confirm</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const confirmModal = document.getElementById('confirmModal');
+  confirmModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const url = button.getAttribute('data-url');
+    const action = button.getAttribute('data-action');
+
+    document.getElementById('modalActionText').textContent = action;
+    document.getElementById('confirmBtn').href = url;
+  });
+</script>
+
+{% endblock %}

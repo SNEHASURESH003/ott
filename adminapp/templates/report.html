@@ -1,0 +1,44 @@
+{% extends 'layout/app-layout.html' %}
+{% block 'content' %}
+<style>
+  table.table tbody td {
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.6), 
+                rgba(0, 0, 0, 0.6)
+              ),
+              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff !important;
+  }
+
+  table.table tbody tr {
+    background: transparent !important;
+  }
+</style>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">MOVIE VIEW REPORT</h2>
+    <table class="table table-striped table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Movie Title</th>
+                <th>View Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+                <tr>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.view_count }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">No movies found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'movielist' %}" class="btn btn-secondary">Back to Movie List</a>
+</div>
+{% endblock %}

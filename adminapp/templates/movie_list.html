@@ -1,0 +1,119 @@
+{% extends 'layout/app-layout.html' %}
+
+{% block 'content' %}
+
+<style>
+  table.table tbody td {
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.6), 
+                rgba(0, 0, 0, 0.6)
+              ),
+              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff !important;
+  }
+
+  table.table tbody tr {
+    background: transparent !important;
+  }
+</style>
+<h1 class="text-center ">MOVIE LISTS</h1><br>
+
+<div class="d-flex justify-content-end align-items-center  container mt-5" style="gap: 8px;">
+<a href="{% url 'addmovie' %}" class="btn  btn-sm" style="background:rgba(163, 8, 165, 0.8); color: white;" title="Add New Movie">
+        <i class="bi bi-plus"></i> Add New Movie
+    </a>
+
+
+
+  <form method="get" action="{% url 'search_movies' %}" class="mb-0" style="position: relative; width: 250px;">
+    <input 
+      type="text" 
+      name="q" 
+      class="form-control form-control-sm " style="background:rgba(198, 10, 201, 0.8); color: white"
+      placeholder="Search by title" 
+      value="{{ query }}" 
+      required>
+    <button 
+      type="submit" 
+      class="btn btn-sm  position-absolute top-0 end-0 h-100" style="background:rgba(54, 5, 55, 0.8); color: white;" title="Add New Movie"
+      title="Search">
+      <i class="bi bi-search"></i>
+      <span class="visually-hidden" >Search</span>
+    </button>
+  </form>
+
+  <a href="{% url 'movielist' %}" class="btn btn-sm btn-outline-light" title="Back to full list">
+    <i class="bi bi-arrow-left"></i> Back
+  </a>
+</div>
+
+<br><br>
+
+<table class="table table-bordered container mt-5" style="width: 100%;">
+  <thead class="table-dark">
+    <tr>
+      <th>Sno</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for movie in movies %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ movie.title }}</td>
+      <td>{{ movie.description }}</td>
+      <td>
+        <div class="d-flex gap-2">
+          <a href="{% url 'admin_movieview' movie.id %}" class="btn btn-info btn-sm d-inline">
+            <i class="bi bi-eye"></i> View
+          </a>
+          <a href="{% url 'movie_edit' movie.id %}" class="btn btn-warning btn-sm d-inline">
+            <i class="bi bi-pencil-square"></i> Edit
+          </a>
+          <form method="post" action="{% url 'delete_movie' movie.id %}" style="display: inline;">
+            {% csrf_token %}
+        <!-- Trigger button -->
+<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ movie.id }}">
+  <i class="bi bi-trash"></i> Delete
+</button>
+
+<!-- Modal -->
+<div class="modal fade"  id="confirmDeleteModal{{ movie.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ movie.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:rgba(75, 8, 76, 0.8); color: white;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel{{ movie.id }}">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" >
+        Are you sure you want to delete the movie: <strong>{{ movie.title }}</strong>?
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="{% url 'delete_movie' movie.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+          </form>
+        </div>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4">No movies found.</td></tr>
+  {% endfor %}
+</tbody>
+
+</table>
+</div>
+
+{% endblock %}

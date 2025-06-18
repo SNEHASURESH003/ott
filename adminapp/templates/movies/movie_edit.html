@@ -1,0 +1,55 @@
+{% extends 'layout/app-layout.html' %}
+
+{% block 'content' %}
+<div class="container mt-5 p-4 rounded" style="
+   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    backdrop-filter: blur(4px);
+">
+  <h2 class="text-center text-white">Edit Movie</h2>
+  <form method="POST" enctype="multipart/form-data" class="text-white">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <input type="text" name="title" class="form-control bg-transparent text-white border-white" 
+             value="{{ movie.title }}" placeholder="Movie Title" required>
+    </div>
+
+    <div class="mb-3">
+      <textarea name="description" class="form-control bg-transparent text-white border-white" 
+                rows="5" placeholder="Description" required>{{ movie.description }}</textarea>
+    </div>
+
+    {% if movie.video %}
+    <div class="mb-3">
+      <label class="form-label">Current Video</label><br>
+      <video controls class="w-100" style="max-height: 300px;">
+        <source src="{{ movie.video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    {% endif %}
+    <div class="mb-3">
+      <label class="form-label">Change Video</label>
+      <input type="file" name="video" class="form-control bg-transparent text-white border-white" accept="video/*">
+    </div>
+
+    {% if movie.thumbnail %}
+    <div class="mb-3">
+      <label class="form-label">Current Thumbnail</label><br>
+      <img src="{{ movie.thumbnail.url }}" alt="Thumbnail" class="img-thumbnail" style="max-height: 200px;">
+    </div>
+    {% endif %}
+    <div class="mb-3">
+      <label class="form-label">Change Thumbnail</label>
+      <input type="file" name="thumbnail" class="form-control bg-transparent text-white border-white" accept="image/*">
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a href="{% url 'movielist' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

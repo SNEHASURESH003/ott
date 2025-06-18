@@ -1,0 +1,44 @@
+{% extends 'layout/app-layout.html' %}
+
+{% block 'content' %}
+<div class="container mt-5 text-center text-white" style="
+    max-width: 900px;
+    background: rgba(72, 8, 102, 0.6);
+    padding: 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    margin-left: auto;
+    margin-right: auto;
+">
+  <h2 class="mb-4">{{ movie.title }}</h2>
+
+  <!-- Large centered video -->
+  <div class="mb-4" style="display: flex; justify-content: center;">
+   {% if movie.video %}
+  <div class="mb-4" style="display: flex; justify-content: center;">
+    <video controls style="width: 100%; max-width: 800px; border-radius: 10px;">
+      <source src="{{ movie.video.url }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+{% else %}
+  <p class="text-warning text-center">No video uploaded for this movie.</p>
+{% endif %}
+  </div>
+
+  <!-- Full width thumbnail -->
+  <div class="mb-4">
+    {% if movie.thumbnail %}
+      <img src="{{ movie.thumbnail.url }}" alt="Thumbnail" class="img-fluid rounded" style="width: 100%; max-width: 800px;">
+    {% else %}
+      <p class="text-warning text-center">No thumbnail uploaded for this movie.</p>
+    {% endif %}
+  </div>
+
+  <!-- Description -->
+  <p style="font-size: 1.2rem; line-height: 1.5;">{{ movie.description }}</p>
+
+  <!-- Back button -->
+  <a href="{% url 'movielist' %}" class="btn btn-outline-light mt-3 px-4 py-2">Back to Movie List</a>
+</div>
+{% endblock %}

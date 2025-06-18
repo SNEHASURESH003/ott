@@ -1,0 +1,55 @@
+{% extends 'layout/app-layout.html' %}
+{% block 'content' %}
+<style>
+  table.table tbody td {
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.6), 
+                rgba(0, 0, 0, 0.6)
+              ),
+              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff !important;
+  }
+
+  table.table tbody tr {
+    background: transparent !important;
+  }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center ">History for {{ user.name }}</h2>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Status:</strong> 
+  {% if user_obj.is_active %}
+    <span >Active</span>
+  {% else %}
+    <span >Blocked</span>
+  {% endif %}
+</p>
+
+<h4>View History:</h4>
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Movie Title</th>
+            <th>Date Viewed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in history %}
+            <tr>
+                <td>{{ item.movie.title }}</td>
+                <td>{{ item.watched_at }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2">No history available.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'userlist' %}" class="btn btn-secondary mt-3">Back to User List</a>
+
+{% endblock %}

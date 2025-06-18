@@ -1,0 +1,41 @@
+{% extends 'layout/app-layout.html' %}
+{% load static %}
+
+{% block 'content' %}
+<div class="container mt-5 p-4 rounded text-white" style="
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdm7GD0Kil_gAZ8Ih4_Chd0hgoer_gnitoPQ&s');
+              
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+">
+  <h2 class="text-center mb-4">Add New Movie</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <input type="text" name="title" class="form-control bg-transparent text-white border-white" 
+             placeholder="Movie Title" required>
+    </div>
+
+    <div class="mb-3">
+      <textarea name="description" class="form-control bg-transparent text-white border-white" 
+                rows="5" placeholder="Description" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Upload Video</label>
+      <input type="file" name="video" class="form-control bg-transparent text-white border-white" accept="video/*" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Upload Thumbnail</label>
+      <input type="file" name="thumbnail" class="form-control bg-transparent text-white border-white" accept="image/*" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+    <a href="{% url 'movielist' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
